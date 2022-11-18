@@ -1,0 +1,250 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1 class="mt-4">Dashboard</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Detalle</li>
+</ol>
+<div class="row">
+    <div class="col-4">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>Total Productos</div>
+                    <div id="total-productos">40</div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="@Url.Action("Producto","Home")">Ver Detalles</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>Total Marcas</div>
+                    <div id="total-marcas">30</div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="@Url.Action("Marca","Home")">Ver Detalles</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>Total Categorias</div>
+                    <div id="total-categorias">34</div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="@Url.Action("Categoria","Home")">Ver Detalles</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white mb-4">
+                Ventas por día
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <canvas id="ventasBar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white mb-4">
+                Productos más vendidos
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <canvas id="productosPie"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            jQuery.ajax({
+                url: '@Url.Action("ListarProducto", "Home")',
+                type: "GET",
+                data: null,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    if (data.data != null) {
+                        $("#total-productos").text(data.data.length);
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                beforeSend: function () {
+
+                },
+            });
+
+             jQuery.ajax({
+                url: '@Url.Action("ListarMarca", "Home")',
+                type: "GET",
+                data: null,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.data != null) {
+                        $("#total-marcas").text(data.data.length);
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                beforeSend: function () {
+
+                },
+            });
+
+             jQuery.ajax({
+                url: '@Url.Action("ListarCategoria", "Home")',
+                type: "GET",
+                data: null,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.data != null) {
+                        $("#total-categorias").text(data.data.length);
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                beforeSend: function () {
+
+                },
+            });
+
+
+            jQuery.ajax({
+                url: '@Url.Action("ReporteVentas", "Reporte")',
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    /*console.log(data);*/
+
+                    var arrayFechas = [];
+                    var arrayMonto = [];
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        /*console.log(data[i].mes)*/
+                        arrayFechas.push(data[i].Fecha)
+                        arrayMonto.push(data[i].Monto)
+                    }
+
+                    console.log(arrayFechas)
+                    console.log(arrayMonto)
+
+                    var controlBar1 = document.getElementById("ventasBar");
+
+                    var graficoBar1 = new Chart(controlBar1, {
+                        type: 'bar',
+                        data: {
+                            labels: arrayFechas,
+                            datasets: [{
+                                label: "Ventas por dia",
+                                /*backgroundColor: "#0800B1",*/
+                                backgroundColor: ["#0083B1", "#0083B1", "#0083B1", "#0083B1", "#0083B1", "#0083B1", "#0083B1"],
+                                borderColor: "#000000",
+                                borderWidth: 0,
+                                data: arrayMonto,
+                            }],
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    },
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                    },
+                                    gridLines: {
+                                        display: true
+                                    }
+                                }],
+                            },
+                            legend: {
+                                display: true
+                            }
+                        }
+                    });
+
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+            jQuery.ajax({
+                url: '@Url.Action("ReporteProductos", "Reporte")',
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    /*console.log(data);*/
+
+                    var arrayProductos = [];
+                    var arrayCantidad = [];
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        /*console.log(data[i].producto)*/
+                        arrayProductos.push(data[i].Nombre)
+                        arrayCantidad.push(data[i].Cantidad)
+                    }
+
+
+                    var controlPie1 = document.getElementById("productosPie");
+                    var graficoPie1 = new Chart(controlPie1, {
+                        type: 'pie',
+                        data: {
+                            labels: arrayProductos,
+                            datasets: [{
+                                data: arrayCantidad,
+                                backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+                            }],
+                        },
+                    });
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+
+        })
+    </script>
+
+}

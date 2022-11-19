@@ -104,5 +104,42 @@ namespace ProyectoTest.Logica
             }
         }
 
+        public List<ReporteCliente> GraficoClientes()
+        {
+            List<ReporteCliente> listaClientes = new List<ReporteCliente>();
+
+            try
+            {
+                using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_ClientesVentas", oConexion))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        oConexion.Open();
+
+                        using (SqlDataReader sdr = cmd.ExecuteReader())
+                        {
+                            while (sdr.Read())
+                            {
+                                listaClientes.Add(new ReporteCliente()
+                                {
+                                    Nombre = sdr["Nombres"].ToString(),
+                                    Monto = Convert.ToDecimal(sdr["Monto"].ToString())
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return listaClientes;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

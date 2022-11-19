@@ -35,5 +35,15 @@ namespace ProyectoTest.Controllers
 
             return Json(listaProductos, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult ReporteClientes()
+        {
+            List<ReporteCliente> listaClientes = new List<ReporteCliente>();
+
+            listaClientes = ReporteLogica.Instancia.GraficoClientes();
+
+            return Json(listaClientes, JsonRequestBehavior.AllowGet);
+        }
     }   
 }

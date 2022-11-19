@@ -45,6 +45,14 @@ namespace ProyectoTest.Controllers
             return View();
         }
 
+        public ActionResult Ventas() 
+        {
+            if (Session["Usuario"] == null || ((Usuario)Session["Usuario"]).EsAdministrador == false)
+                return RedirectToAction("Index", "Login");
+
+            return View();
+        }
+
         public ActionResult Tienda()
         {
             if (Session["Usuario"] == null)
@@ -182,6 +190,14 @@ namespace ProyectoTest.Controllers
             bool respuesta = false;
             respuesta = ProductoLogica.Instancia.Eliminar(id);
             return Json(new { resultado = respuesta }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult ListarVentas() 
+        {
+            List<VMVenta> listaVentas = new List<VMVenta>();
+            listaVentas = CompraLogica.Instancia.ListarVentas();
+            return Json(new { data = listaVentas }, JsonRequestBehavior.AllowGet);
         }
     }
 

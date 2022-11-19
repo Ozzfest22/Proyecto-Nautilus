@@ -40,16 +40,16 @@
                                         </div>
                                         <div>
                                             <label class="credit-card-label mb-1 mt-2">Número de tarjeta</label>
-                                            <input type="text" class="form-control credit-inputs" placeholder="0000 0000 0000 0000" id="trj_numero">
+                                            <input type="text" class="form-control credit-inputs" maxlength="16" placeholder="0000 0000 0000 0000" id="trj_numero">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label class="credit-card-label mb-1 mt-2">Vigencia</label>
-                                                <input type="text" class="form-control credit-inputs" placeholder="12/24" id="trj_vigencia">
+                                                <input type="text" class="form-control credit-inputs" maxlength="5" placeholder="12/24" id="trj_vigencia">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="credit-card-label mb-1 mt-2">CVV</label>
-                                                <input type="text" class="form-control credit-inputs" placeholder="342" id="trj_cvv">
+                                                <input type="text" class="form-control credit-inputs" maxlength="3" placeholder="342" id="trj_cvv">
                                             </div>
                                         </div>
                                         <hr class="line">
@@ -99,7 +99,7 @@
                     </div>
                     <div class="mb-1">
                         <label for="message-text" class="col-form-label">Telefono:</label>
-                        <input type="text" class="form-control control-validar" autocomplete="off" id="txtTelefono">
+                        <input type="text" class="form-control control-validar" maxlength="9" autocomplete="off" id="txtTelefono">
                     </div>
                     <div class="mb-1">
                         <label for="message-text" class="col-form-label">Direccion:</label>

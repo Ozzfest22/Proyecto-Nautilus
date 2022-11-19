@@ -70,6 +70,48 @@ namespace ProyectoTest.Logica
         }
 
 
+        public List<VMVenta> ListarVentas() 
+        {
+            List<VMVenta> listaVentas = new List<VMVenta>();
+
+            try
+            {
+                using (SqlConnection oConexion = new SqlConnection(Conexion.CN)) 
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_ListaVentas", oConexion)) 
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        oConexion.Open();
+
+                        using (SqlDataReader sdr = cmd.ExecuteReader()) 
+                        {
+                            while (sdr.Read()) 
+                            {
+                                listaVentas.Add(new VMVenta() 
+                                {
+                                    Nombre = sdr["Nombres"].ToString(),
+                                    TotalProducto = Convert.ToInt32(sdr["TotalProducto"].ToString()),
+                                    Contacto = sdr["Contacto"].ToString(),
+                                    Telefono = sdr["Telefono"].ToString(),
+                                    Direccion = sdr["Direccion"].ToString(),
+                                    FechaCompra = sdr["FechaCompra"].ToString(),
+                                    Total = Convert.ToDecimal(sdr["Total"].ToString())
+                                });
+                            }
+                        }
+                    }
+                }
+
+                return listaVentas;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
 
     }
 }
